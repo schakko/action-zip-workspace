@@ -1,15 +1,19 @@
 name: 'ZIP workspace'
 description: 'ZIP the current GitHub Actions workspace'
-author: '10up'
+author: 'schakko'
 inputs:
   filename:
     description: 'Name of the zipped file'
     default: "workspace.zip"
+  subdirectory:
+    description: 'Subdirectory in the ZIP file to place files into'
+    default: ""
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.filename }}
+    - ${{ inputs.subdirectory }}
 branding:
   icon: 'upload-cloud'
   color: 'blue'

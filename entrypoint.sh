@@ -8,6 +8,8 @@ set -eo
 
 # Set variables
 FILENAME="workspace.zip"
+SUBDIRECTORY=""
+
 TMP_WORKSPACE="/github/__tmp__workspace"
 
 # Set options based on user input
@@ -15,22 +17,27 @@ if [ -n "$1" ]; then
   FILENAME=$1;
 fi
 
-mkdir "$TMP_WORKSPACE"
+if [ -n "$2"]; then
+  SUBDIRECTORY="/$2"
+fi
+
+TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY}"
+mkdir -p "${TARGET_DIR}"
 
 echo "➤ Copying files..."
 if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to $TMP_WORKSPACE, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" "$TMP_WORKSPACE/" --delete --delete-excluded
+	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" "$TARGET_DIR/" --delete --delete-excluded
 else
 	echo "ℹ︎ Using .gitattributes"
 
 	cd "$GITHUB_WORKSPACE"
 
 
-	git config --global user.email "10upbot+github@schakko.de"
-	git config --global user.name "10upbot on GitHub"
+	git config --global user.email "gh-actions+github@schakko.de"
+	git config --global user.name "changme"
 
 	# If there's no .gitattributes file, write a default one into place
 	if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
@@ -47,7 +54,7 @@ else
 	fi
 
 	# This will exclude everything in the .gitattributes file with the export-ignore flag
-	git archive HEAD | tar x --directory="$TMP_WORKSPACE"
+	git archive HEAD | tar x --directory="$TARGET_DIR"
 fi
 
 echo "Generating zip file..."

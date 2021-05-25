@@ -17,14 +17,12 @@ if [ -n "$1" ]; then
   FILENAME=$1;
 fi
 
-if [ -n "$2"]; then
+if [ -n "$2" ]; then
   SUBDIRECTORY="/$2"
 fi
 
-echo "Before mkdir"
 TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY}"
 mkdir -p "${TARGET_DIR}"
-echo "After mkdir"
 
 echo "➤ Copying files..."
 if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then

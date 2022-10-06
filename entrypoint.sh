@@ -14,16 +14,18 @@ TMP_WORKSPACE="/github/__tmp__workspace"
 
 # Set options based on user input
 if [ -n "$1" ]; then
-  FILENAME=$1;
+	FILENAME=$1;
 fi
 
 if [ -n "$2" ]; then
-  SUBDIRECTORY="/$2"
+	SUBDIRECTORY="/$2"
 fi
 
+WORKING_DIRECTORY=$GITHUB_WORKSPACE
+
 if [ -n "$3" ]; then
-  echo "Switching to working directory '$3'"
-  cd $3
+	WORKING_DIRECTORY="$GITHUB_WORKSPACE/$3"
+  	echo "Workspace set to $WORKING_DIRECTORY"
 fi
 
 TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY}"
@@ -34,25 +36,25 @@ if [[ -e "$GITHUB_WORKSPACE/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to $TMP_WORKSPACE, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source
-	rsync -rc --exclude-from="$GITHUB_WORKSPACE/.distignore" "$GITHUB_WORKSPACE/" "$TARGET_DIR/" --delete --delete-excluded
+	rsync -rc --exclude-from="$WORKING_DIRECTORY/.distignore" "$WORKING_DIRECTORY/" "$TARGET_DIR/" --delete --delete-excluded
 else
 	echo "ℹ︎ Using .gitattributes"
 
-	cd "$GITHUB_WORKSPACE"
+	cd "$WORKING_DIRECTORY"
 
 
 	git config --global user.email "gh-actions+github@schakko.de"
-	git config --global user.name "changme"
+	git config --global user.name "workspace-zip-bot"
 
 	# If there's no .gitattributes file, write a default one into place
-	if [[ ! -e "$GITHUB_WORKSPACE/.gitattributes" ]]; then
-		cat > "$GITHUB_WORKSPACE/.gitattributes" <<-EOL
+	if [[ ! -e "$WORKING_DIRECTORY/.gitattributes" ]]; then
+		cat > "$WORKING_DIRECTORY/.gitattributes" <<-EOL
 		/.gitattributes export-ignore
 		/.gitignore export-ignore
 		/.github export-ignore
 		EOL
 
-		# Ensure we are in the $GITHUB_WORKSPACE directory, just in case
+		# Ensure we are in the $WORKING_DIRECTORY directory, just in case
 		# The .gitattributes file has to be committed to be used
 		# Just don't push it to the origin repo :)
 		git add .gitattributes && git commit -m "Add .gitattributes file"
@@ -64,5 +66,5 @@ fi
 
 echo "Generating zip file..."
 cd "$TMP_WORKSPACE" || exit
-zip -r "${GITHUB_WORKSPACE}/${FILENAME}" .
+zip -r "${WORKING_DIRECTORY}/${FILENAME}" .
 echo "✓ Zip file generated!"

@@ -8,12 +8,18 @@ inputs:
   subdirectory:
     description: 'Subdirectory in the ZIP file to place files into'
     default: ""
+  working-directory:
+    description: >-
+      The directory in which the rsync command has to be executed
+    required: false
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.filename }}
     - ${{ inputs.subdirectory }}
+    - ${{ inputs.working-directory }} 
 branding:
   icon: 'upload-cloud'
   color: 'blue'

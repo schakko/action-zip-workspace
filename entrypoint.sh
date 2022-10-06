@@ -21,6 +21,11 @@ if [ -n "$2" ]; then
   SUBDIRECTORY="/$2"
 fi
 
+if [ -n "$3" ]; then
+  echo "Switching to working directory '$3'"
+  cd $3
+fi
+
 TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY}"
 mkdir -p "${TARGET_DIR}"
 

@@ -11,6 +11,7 @@ It can exclude files as defined in either `.distignore` or `.gitattributes`.
 ### Optional environment variables
 * `FILENAME` - Filename of the generated ZIP file, defaults to `workspace.zip`
 * `SUBDIRECTORY` - Subdirectory to put the zipped files into, e.g. for WordPress plug-ins
+* `WORKING_DIRECTORY` - Subdirectory in which the rsync command is executed, e.g. when using monorepos
 
 ## Excluding files from deployment
 If there are files or directories to be excluded from deployment, such as tests or editor config files, they can be specified in either a `.distignore` file or a `.gitattributes` file using the `export-ignore` directive. If a `.distignore` file is present, it will be used; if not, the Action will look for a `.gitattributes` file and barring that, will write a basic temporary `.gitattributes` into place before proceeding so that no Git/GitHub-specific files are included.

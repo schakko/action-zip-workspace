@@ -18,7 +18,7 @@ if [ -n "$1" ]; then
 fi
 
 if [ -n "$2" ]; then
-	SUBDIRECTORY="/$2"
+	SUBDIRECTORY_IN_ZIP_FILE="/$2"
 fi
 
 WORKING_DIRECTORY=$GITHUB_WORKSPACE
@@ -28,11 +28,11 @@ if [ -n "$3" ]; then
   	echo "Workspace set to $WORKING_DIRECTORY"
 fi
 
-TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY}"
+TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY_IN_ZIP_FILE}"
 mkdir -p "${TARGET_DIR}"
 
 echo "➤ Copying files..."
-if [[ -e "$WORKING_DIRECTORY/.distignore" || -e "$TARGET_DIR/.distignore" ]]; then
+if [[ -e "$WORKING_DIRECTORY/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to $TMP_WORKSPACE, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source

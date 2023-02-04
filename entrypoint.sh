@@ -41,8 +41,8 @@ else
 	echo "ℹ︎ Using .gitattributes"
 
 	cd "$WORKING_DIRECTORY"
-
-
+	
+	git config --global --add safe.directory $WORKING_DIRECTORY
 	git config --global user.email "gh-actions+github@schakko.de"
 	git config --global user.name "workspace-zip-bot"
 

@@ -21,12 +21,18 @@ if [ -n "$2" ]; then
 	SUBDIRECTORY_IN_ZIP_FILE="/$2"
 fi
 
+echo "Current working directory: `pwd`"
+ls -al `pwd`
+
 WORKING_DIRECTORY=$GITHUB_WORKSPACE
 
 if [ -n "$3" ]; then
 	WORKING_DIRECTORY="$GITHUB_WORKSPACE/$3"
   	echo "Workspace set to $WORKING_DIRECTORY"
 fi
+
+echo "Working directory: $WORKING_DIRECTORY"
+ls -al $WORKING_DIRECTORY
 
 TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY_IN_ZIP_FILE}"
 mkdir -p "${TARGET_DIR}"

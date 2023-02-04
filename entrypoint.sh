@@ -32,7 +32,7 @@ TARGET_DIR="${TMP_WORKSPACE}${SUBDIRECTORY}"
 mkdir -p "${TARGET_DIR}"
 
 echo "➤ Copying files..."
-if [[ -e "$WORKING_DIRECTORY/.distignore" ]]; then
+if [[ -e "$WORKING_DIRECTORY/.distignore" || -e "$TARGET_DIR/.distignore" ]]; then
 	echo "ℹ︎ Using .distignore"
 	# Copy from current branch to $TMP_WORKSPACE, excluding dotorg assets
 	# The --delete flag will delete anything in destination that no longer exists in source

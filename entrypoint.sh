@@ -67,7 +67,9 @@ else
 	fi
 
 	# This will exclude everything in the .gitattributes file with the export-ignore flag
-	git archive HEAD | tar x --directory="$TARGET_DIR"
+	# A stash is created so that uncommitted but relevant temporary changes (e.g. version information during the build process) are included with git archive.
+	stashed=`git stash create`
+	git archive ${stashed:-HEAD} | tar x --directory="$TARGET_DIR"
 fi
 
 echo "Generating zip file..."
